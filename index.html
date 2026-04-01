@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>StreamVerse - Premium OTT Platform</title>
+    <link rel="icon" type="image/png" href="ott.png">
+    <link rel="stylesheet" href="index.css?v=5">
+    <link rel="stylesheet" href="series.css?v=5">
+    <link rel="stylesheet" href="modern-effects.css?v=5">
+    <meta name="theme-color" content="#e50914">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StreamVerse">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="ott.png">
+</head>
+<body>
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="index.html" class="nav-item active">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="search.html" class="nav-item">
+            <span class="nav-icon">🔍</span>
+            <span class="nav-label">Search</span>
+        </a>
+        <a href="#trending" class="nav-item">
+            <span class="nav-icon">🔥</span>
+            <span class="nav-label">Trending</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <!-- Stylish Top Navbar - Only for Index -->
+    <nav class="top-navbar">
+        <div class="top-nav-container">
+            <div class="brand-logo">
+                <span class="brand-text">StreamVerse</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Navigation -->
+    <nav class="navbar" style="display: none;">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">Stream</span><span class="logo-accent">Verse</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="search.html">Discover</a>
+                <a href="#trending">Trending</a>
+                <a href="profile.html">My Library</a>
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-right">
+                <input type="text" class="search-input" placeholder="Search movies, series..." id="quickSearch">
+                <a href="profile.html" class="profile-btn">Profile</a>
+                <a href="admin.html" class="admin-btn" id="adminBtn" style="display: none;">Admin</a>
+            </div>
+            <div class="mobile-nav-menu" id="mobileNavMenu">
+                <a href="index.html">Home</a>
+                <a href="search.html">Discover</a>
+                <a href="#trending">Trending</a>
+                <a href="profile.html">My Library</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel Section -->
+    <section class="hero-carousel">
+        <div class="hero-slide active" data-movie="andhra-king">
+            <div class="hero-bg" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(20,20,20,0.8)), url('andhra.png')"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">Andhra King</h1>
+                <p class="hero-description">
+                    A powerful political drama set in Andhra Pradesh, following the rise of a charismatic leader who fights against corruption and injustice. With intense action sequences and compelling storytelling, Andhra King showcases the struggle for power and the price of leadership in modern India.
+                </p>
+                <div class="hero-buttons">
+                    <button class="hero-btn hero-btn-play" onclick="playMovie('andhra-king')">▶ Play</button>
+                    <button class="hero-btn hero-btn-info" onclick="showMovieModal('andhra-king')">ℹ Info</button>
+                    <button class="hero-btn hero-btn-trailer" onclick="playTrailer('andhra-king')">🎬 Trailer</button>
+                </div>
+                <div class="hero-meta">
+                    <span class="rating">⭐ 8.5</span>
+                    <span class="year">2024</span>
+                    <span class="duration">2h 45m</span>
+                    <span class="genre">Action • Drama • Thriller</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-slide" data-movie="ponman">
+            <div class="hero-bg" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(20,20,20,0.8)), url('ponman_hero.png?v=2')"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">Ponman</h1>
+                <p class="hero-description">
+                    A heartwarming family drama that follows the journey of a middle-class man who discovers the true meaning of happiness and success through unexpected life events. With brilliant performances and emotional storytelling, Ponman explores themes of family bonds, personal growth, and finding joy in simple moments.
+                </p>
+                <div class="hero-buttons">
+                    <button class="hero-btn hero-btn-play" onclick="playMovie('ponman')">▶ Play</button>
+                    <button class="hero-btn hero-btn-info" onclick="showMovieModal('ponman')">ℹ Info</button>
+                    <button class="hero-btn hero-btn-trailer" onclick="playTrailer('ponman')">🎬 Trailer</button>
+                </div>
+                <div class="hero-meta">
+                    <span class="rating">⭐ 8.7</span>
+                    <span class="year">2024</span>
+                    <span class="duration">2h 28m</span>
+                    <span class="genre">Drama • Family • Comedy</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-slide" data-movie="dude-2025">
+            <div class="hero-bg" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(20,20,20,0.8)), url('dude_hero.png')"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">Dude</h1>
+                <p class="hero-description">
+                    Childhood friends Agan and Kural run an event-planning business and share a warm, close bond. When Kural falls in love with someone else, things get complicated — especially because Kural's father, a powerful minister, has deep issues of caste and honour. A heartfelt Tamil romance exploring friendship, love, and social dynamics.
+                </p>
+                <div class="hero-buttons">
+                    <button class="hero-btn hero-btn-play" onclick="playMovie('dude-2025')">▶ Play</button>
+                    <button class="hero-btn hero-btn-info" onclick="showMovieModal('dude-2025')">ℹ Info</button>
+                    <button class="hero-btn hero-btn-trailer" onclick="playTrailer('dude-2025')">🎬 Trailer</button>
+                </div>
+                <div class="hero-meta">
+                    <span class="rating">⭐ 8.2</span>
+                    <span class="year">2025</span>
+                    <span class="duration">2h 19m</span>
+                    <span class="genre">Romance • Drama</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-slide" data-movie="stranger-things">
+            <div class="hero-bg" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(20,20,20,0.8)), url('hero.jpg')"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">Stranger Things</h1>
+                <p class="hero-description">
+                    Stranger Things follows the disappearance of a young boy in Hawkins, Indiana, leading his friends and family into a web of government conspiracies, secret experiments, and paranormal forces. A mysterious girl with extraordinary abilities becomes their only hope, while a terrifying dimension known as the Upside Down threatens everything they know.
+                </p>
+                <div class="hero-buttons">
+                    <button class="hero-btn hero-btn-play" onclick="playSeriesFromStart('stranger-things')">▶ Play</button>
+                    <button class="hero-btn hero-btn-info" onclick="showSeriesModal('stranger-things')">ℹ Info</button>
+                    <button class="hero-btn hero-btn-trailer" onclick="playTrailer('stranger-things')">🎬 Trailer</button>
+                </div>
+                <div class="hero-meta">
+                    <span class="rating">⭐ 8.7</span>
+                    <span class="year">2016</span>
+                    <span class="duration">8 Episodes</span>
+                    <span class="genre">Sci-Fi • Horror • Drama</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Navigation -->
+        <div class="hero-nav">
+            <button class="hero-nav-btn prev" onclick="changeHeroSlide(-1)">‹</button>
+            <button class="hero-nav-btn next" onclick="changeHeroSlide(1)">›</button>
+        </div>
+
+        <!-- Carousel Indicators -->
+        <div class="hero-indicators">
+            <span class="indicator active" onclick="goToSlide(0)"></span>
+            <span class="indicator" onclick="goToSlide(1)"></span>
+            <span class="indicator" onclick="goToSlide(2)"></span>
+            <span class="indicator" onclick="goToSlide(3)"></span>
+        </div>
+    </section>
+
+    <!-- Continue Watching -->
+    <section class="content-section">
+        <h2 class="section-title">Continue Watching</h2>
+        <div class="movie-row" id="continueWatching">
+            <!-- Dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- TV Series -->
+    <section class="content-section">
+        <h2 class="section-title">📺 TV Series</h2>
+        <div class="movie-row" id="seriesContent">
+            <!-- Dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Trending Now -->
+    <section class="content-section" id="trending">
+        <h2 class="section-title">🔥 Trending Now</h2>
+        <div class="movie-row" id="trendingMovies">
+            <!-- Dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Action Movies -->
+    <section class="content-section">
+        <h2 class="section-title">⚡ Action & Adventure</h2>
+        <div class="movie-row" id="actionMovies">
+            <!-- Dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Drama -->
+    <section class="content-section">
+        <h2 class="section-title">🎭 Drama</h2>
+        <div class="movie-row" id="dramaMovies">
+            <!-- Dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Sci-Fi -->
+    <section class="content-section">
+        <h2 class="section-title">🚀 Sci-Fi & Fantasy</h2>
+        <div class="movie-row" id="scifiMovies">
+            <!-- Dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Comedy -->
+    <section class="content-section">
+        <h2 class="section-title">😄 Comedy</h2>
+        <div class="movie-row" id="comedyMovies">
+            <!-- Dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Horror -->
+    <section class="content-section">
+        <h2 class="section-title">👻 Horror & Thriller</h2>
+        <div class="movie-row" id="horrorMovies">
+            <!-- Dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Movie Modal -->
+    <div class="modal" id="movieModal">
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Trailer Modal -->
+    <div class="modal" id="trailerModal">
+        <div class="modal-backdrop" onclick="closeTrailerModal()"></div>
+        <div class="modal-content trailer-modal">
+            <button class="modal-close" onclick="closeTrailerModal()">✕</button>
+            <div class="trailer-container" id="trailerContainer">
+                <!-- Trailer video -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="series.js"></script>
+    <script src="modern-ui.js"></script>
+    <script src="network-check.js"></script>
+    
+    <!-- PWA Registration -->
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        const installButton = document.createElement('button');
+        installButton.textContent = '📱 Install App';
+        installButton.style.cssText = `
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 24px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+            z-index: 1000;
+            display: none;
+            transition: all 0.3s ease;
+        `;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'block';
+            document.body.appendChild(installButton);
+        });
+
+        installButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                installButton.style.display = 'none';
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA was installed');
+            installButton.style.display = 'none';
+        });
+    </script>
+    
+    <script>
+        // Hero Carousel Functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            // Remove active class from all slides and indicators
+            slides.forEach(slide => slide.classList.remove('active'));
+            indicators.forEach(indicator => indicator.classList.remove('active'));
+            
+            // Add active class to current slide and indicator
+            slides[index].classList.add('active');
+            indicators[index].classList.add('active');
+        }
+
+        function changeHeroSlide(direction) {
+            currentSlide += direction;
+            
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            } else if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+            
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        // Auto-play carousel
+        function autoPlayCarousel() {
+            changeHeroSlide(1);
+        }
+
+        // Start auto-play (change slide every 5 seconds)
+        let autoPlayInterval = setInterval(autoPlayCarousel, 5000);
+
+        // Pause auto-play on hover
+        const heroCarousel = document.querySelector('.hero-carousel');
+        heroCarousel.addEventListener('mouseenter', () => {
+            clearInterval(autoPlayInterval);
+        });
+
+        heroCarousel.addEventListener('mouseleave', () => {
+            autoPlayInterval = setInterval(autoPlayCarousel, 5000);
+        });
+
+        // Enhanced Touch/Swipe support for mobile
+        let startX = 0;
+        let endX = 0;
+        let startY = 0;
+        let endY = 0;
+        let isScrolling = false;
+
+        heroCarousel.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isScrolling = false;
+        }, { passive: true });
+
+        heroCarousel.addEventListener('touchmove', (e) => {
+            if (!isScrolling) {
+                const currentX = e.touches[0].clientX;
+                const currentY = e.touches[0].clientY;
+                const diffX = Math.abs(currentX - startX);
+                const diffY = Math.abs(currentY - startY);
+                
+                // Determine if user is scrolling vertically or swiping horizontally
+                if (diffY > diffX) {
+                    isScrolling = true;
+                } else if (diffX > 10) {
+                    // Prevent vertical scroll when swiping horizontally
+                    e.preventDefault();
+                }
+            }
+        }, { passive: false });
+
+        heroCarousel.addEventListener('touchend', (e) => {
+            if (!isScrolling) {
+                endX = e.changedTouches[0].clientX;
+                endY = e.changedTouches[0].clientY;
+                handleSwipe();
+            }
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = startX - endX;
+            const verticalDiff = Math.abs(startY - endY);
+
+            // Only trigger swipe if horizontal movement is greater than vertical
+            if (Math.abs(diff) > swipeThreshold && verticalDiff < 100) {
+                if (diff > 0) {
+                    // Swipe left - next slide
+                    changeHeroSlide(1);
+                } else {
+                    // Swipe right - previous slide
+                    changeHeroSlide(-1);
+                }
+            }
+        }
+
+        // Enhanced Mobile Menu Toggle Function
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileNavMenu');
+            const body = document.body;
+            
+            mobileMenu.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (mobileMenu.classList.contains('active')) {
+                body.style.overflow = 'hidden';
+            } else {
+                body.style.overflow = '';
+            }
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileNavMenu');
+            const toggleButton = document.querySelector('.mobile-menu-toggle');
+            
+            if (mobileMenu && toggleButton && 
+                !mobileMenu.contains(event.target) && 
+                !toggleButton.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const mobileMenu = document.getElementById('mobileNavMenu');
+                if (mobileMenu) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // Bottom Navigation Active State
+        function updateBottomNavigation() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                const href = item.getAttribute('href');
+                
+                if ((currentPage === 'index.html' || currentPage === '') && href === 'index.html') {
+                    item.classList.add('active');
+                } else if (href && href !== '#trending' && currentPage.includes(href.replace('.html', ''))) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize bottom navigation
+        updateBottomNavigation();
+
+        // Add ripple effect to buttons
+        function addRippleEffect(e) {
+            const button = e.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            // Remove existing ripples
+            const existingRipples = button.querySelectorAll('.ripple');
+            existingRipples.forEach(r => r.remove());
+            
+            button.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // Add ripple effect to all buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('button, .btn-play, .btn-info, .btn-trailer, .card-btn, .nav-item')) {
+                addRippleEffect(e);
+            }
+        });
+
+        // Optimize scroll performance
+        let ticking = false;
+        function updateScrollEffects() {
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateScrollEffects);
+                ticking = true;
+            }
+        }, { passive: true });
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Watch - StreamVerse</title>
+    <link rel="icon" type="image/png" href="ott.png">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="modern-effects.css">
+    <meta name="theme-color" content="#000000">
+    <style>
+        .watch-container {
+            background: #000000;
+            min-height: 100vh;
+            padding-top: 0;
+        }
+        
+        @media (min-width: 769px) {
+            .watch-container {
+                background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+                background-attachment: fixed;
+                padding-top: 70px;
+            }
+        }
+        
+        .video-player {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto 20px;
+            background: #000000;
+            border-radius: 0;
+            overflow: visible;
+            box-shadow: none;
+            position: relative;
+        }
+        
+        @media (min-width: 769px) {
+            .video-player {
+                max-width: 1400px;
+                border-radius: 24px;
+                box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+                margin-bottom: 40px;
+                overflow: hidden;
+            }
+        }
+        
+        .player-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000000;
+            padding: 0;
+            margin: 0;
+        }
+        
+        video, iframe {
+            width: 100%;
+            height: 100%;
+            outline: none;
+            border: none;
+        }
+        
+        /* Hide custom controls when using Google Drive player */
+        .player-controls {
+            display: none;
+        }
+        
+        /* Google Drive player specific adjustments */
+        iframe[src*="drive.google.com"] {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+            outline: none !important;
+        }
+        
+        .player-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.95));
+            padding: 30px 16px 16px;
+            opacity: 1;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+        }
+        
+        @media (min-width: 769px) {
+            .player-controls {
+                padding: 50px 24px 24px;
+                opacity: 0;
+            }
+        }
+        
+        .player-wrapper:hover .player-controls,
+        .player-wrapper.show-controls .player-controls,
+        .player-wrapper.mobile-controls .player-controls {
+            opacity: 1;
+        }
+        
+        /* Mobile controls always visible */
+        @media (max-width: 768px) {
+            .player-controls {
+                opacity: 1 !important;
+            }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: height 0.2s ease;
+            touch-action: manipulation;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (min-width: 769px) {
+            .progress-bar {
+                height: 6px;
+                border-radius: 6px;
+                margin-bottom: 20px;
+                background: rgba(255,255,255,0.2);
+            }
+        }
+        
+        .progress-bar:hover {
+            height: 8px;
+        }
+        
+        @media (min-width: 769px) {
+            .progress-bar:hover {
+                height: 8px;
+            }
+        }
+        
+        .progress-filled {
+            height: 100%;
+            background: linear-gradient(90deg, #e50914, #f40612);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        @media (min-width: 769px) {
+            .progress-filled {
+                border-radius: 6px;
+            }
+        }
+        
+        .controls-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .controls-left, .controls-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        @media (min-width: 769px) {
+            .controls-left, .controls-right {
+                gap: 20px;
+                flex-wrap: nowrap;
+            }
+        }
+        
+        .control-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            font-size: 18px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (min-width: 769px) {
+            .control-btn {
+                font-size: 20px;
+                width: 48px;
+                height: 48px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+        
+        .control-btn:hover {
+            background: rgba(229, 9, 20, 0.8);
+            transform: scale(1.1);
+            border-color: rgba(229, 9, 20, 0.5);
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .time-display {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (min-width: 769px) {
+            .time-display {
+                font-size: 14px;
+                padding: 8px 16px;
+                border-radius: 20px;
+                background: rgba(0, 0, 0, 0.5);
+            }
+        }
+        
+        .volume-control {
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @media (min-width: 769px) {
+            .volume-control {
+                display: flex;
+                gap: 12px;
+            }
+        }
+        
+        .volume-slider {
+            width: 60px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        @media (min-width: 769px) {
+            .volume-slider {
+                width: 100px;
+                height: 4px;
+                border-radius: 4px;
+            }
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: linear-gradient(135deg, #e50914, #f40612);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        @media (min-width: 769px) {
+            .volume-slider::-webkit-slider-thumb {
+                width: 16px;
+                height: 16px;
+            }
+        }
+        
+        #speedControl {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        @media (min-width: 769px) {
+            #speedControl {
+                padding: 5px 10px;
+                border-radius: 5px;
+                font-size: 14px;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.2);
+            }
+        }
+        
+        .movie-info-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 16px 24px;
+            margin-top: 30px;
+        }
+        
+        @media (min-width: 769px) {
+            .movie-info-section {
+                padding: 60px 24px;
+                margin-top: 50px;
+            }
+        }
+        
+        .movie-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        @media (min-width: 769px) {
+            .movie-details {
+                grid-template-columns: 1fr 2fr;
+                gap: 60px;
+                margin-bottom: 60px;
+            }
+        }
+        
+        .movie-poster {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        @media (min-width: 769px) {
+            .movie-poster {
+                max-width: none;
+                margin: 0;
+                border-radius: 24px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            }
+        }
+        
+        .movie-info h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+        
+        @media (min-width: 769px) {
+            .movie-info h1 {
+                font-size: 48px;
+                margin-bottom: 20px;
+                letter-spacing: -1px;
+                text-align: left;
+            }
+        }
+        
+        .movie-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        @media (min-width: 769px) {
+            .movie-meta {
+                gap: 24px;
+                margin-bottom: 24px;
+                justify-content: flex-start;
+            }
+        }
+        
+        .movie-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 24px;
+            font-weight: 400;
+            text-align: center;
+        }
+        
+        @media (min-width: 769px) {
+            .movie-description {
+                font-size: 18px;
+                line-height: 1.8;
+                margin-bottom: 20px;
+                text-align: left;
+            }
+        }
+        
+        .back-btn {
+            background: #e50914;
+            border: none;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            touch-action: manipulation;
+            min-height: 40px;
+        }
+        
+        @media (min-width: 769px) {
+            .back-btn {
+                padding: 10px 20px;
+                border-radius: 4px;
+                font-size: 14px;
+                gap: 8px;
+                min-height: auto;
+            }
+        }
+        
+        .back-btn:hover {
+            background: #f40612;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+        }
+        
+        /* Mobile Back Button */
+        .mobile-back-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+        }
+        
+        .mobile-back-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background: rgba(0, 0, 0, 0.8);
+            border: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .mobile-back-btn:hover {
+            background: rgba(229, 9, 20, 0.9);
+            transform: scale(1.05);
+        }
+        
+        .mobile-back-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .back-icon {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-back-container {
+                display: none;
+            }
+        }
+        
+        /* Ensure Google Drive player has full space */
+        .player-wrapper iframe {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Movie Info Toggle */
+        .info-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 20px;
+            -webkit-tap-highlight-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-toggle:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .toggle-text {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .toggle-icon {
+            font-size: 16px;
+            color: #ffffff;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .info-toggle.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+        
+        .movie-details {
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 1000px;
+            opacity: 1;
+        }
+        
+        .movie-details.hidden {
+            max-height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+        }
+        
+        /* Mobile-specific player controls */
+        @media (max-width: 768px) {
+            .controls-bottom {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .controls-left {
+                order: 2;
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .controls-right {
+                order: 1;
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .time-display {
+                order: 3;
+                align-self: center;
+            }
+        }
+        
+        /* Hide controls after inactivity on mobile */
+        .player-wrapper.mobile-hide-controls .player-controls {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="watch-container">
+        <!-- Navbar -->
+        <nav class="navbar scrolled" style="display: none;">
+            <div class="nav-container">
+                <div class="logo">
+                    <span class="logo-text">Stream</span><span class="logo-accent">Verse</span>
+                </div>
+                <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+            </div>
+        </nav>
+
+        <!-- Mobile Back Button -->
+        <div class="mobile-back-container">
+            <button class="mobile-back-btn" onclick="window.location.href='index.html'">
+                <span class="back-icon">←</span>
+            </button>
+        </div>
+
+        <!-- Video Player -->
+        <div class="video-player">
+            <div class="player-wrapper">
+                <video id="videoPlayer" poster="">
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                
+                <div class="player-controls">
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-filled" id="progressFilled"></div>
+                    </div>
+                    <div class="controls-bottom">
+                        <div class="controls-left">
+                            <button class="control-btn" id="playPauseBtn">▶</button>
+                            <button class="control-btn" id="rewindBtn">⏪</button>
+                            <button class="control-btn" id="forwardBtn">⏩</button>
+                            <span class="time-display">
+                                <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                            </span>
+                        </div>
+                        <div class="controls-right">
+                            <div class="volume-control">
+                                <button class="control-btn" id="muteBtn">🔊</button>
+                                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+                            </div>
+                            <select id="speedControl" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+                                <option value="0.5">0.5x</option>
+                                <option value="0.75">0.75x</option>
+                                <option value="1" selected>1x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2x</option>
+                            </select>
+                            <button class="control-btn" id="pipBtn">📺</button>
+                            <button class="control-btn" id="fullscreenBtn">⛶</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie Info -->
+        <div class="movie-info-section">
+            <div class="movie-details">
+                <img id="moviePoster" class="movie-poster" src="" alt="">
+                <div class="movie-info">
+                    <h1 id="movieTitle"></h1>
+                    <div class="movie-meta">
+                        <span id="movieRating"></span>
+                        <span id="movieYear"></span>
+                        <span id="movieDuration"></span>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <span id="movieGenre" style="background: rgba(255,0,110,0.2); padding: 8px 20px; border-radius: 20px;"></span>
+                    </div>
+                    <p class="movie-description" id="movieDescription"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="network-check.js"></script>
+    <script src="app.js"></script>
+    <script src="player.js"></script>
+    
+    <script>
+        // Toggle Movie Info Section
+        function toggleMovieInfo() {
+            const movieDetails = document.getElementById('movieDetails');
+            const toggleButton = document.querySelector('.info-toggle');
+            
+            if (movieDetails.classList.contains('hidden')) {
+                movieDetails.classList.remove('hidden');
+                toggleButton.classList.remove('collapsed');
+            } else {
+                movieDetails.classList.add('hidden');
+                toggleButton.classList.add('collapsed');
+            }
+        }
+        
+        // Auto-hide movie info on mobile for better video experience
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                const movieDetails = document.getElementById('movieDetails');
+                const toggleButton = document.querySelector('.info-toggle');
+                movieDetails.classList.add('hidden');
+                toggleButton.classList.add('collapsed');
+            }, 3000); // Hide after 3 seconds
+        }
+    </script>
+    
+    
+</body>
+</html>
+
+
